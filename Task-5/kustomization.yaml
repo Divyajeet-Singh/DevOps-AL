@@ -1,0 +1,8 @@
+resources:
+  - Prometheus_ConfigMap.yaml
+  - Prometheus_PVC.yaml
+  - Grafana_PVC.yaml
+  - Prometheus_Service.yaml
+  - Grafana_Service.yaml
+  - Prometheus_Deployment.yaml
+  - Grafana_Deployment.yaml

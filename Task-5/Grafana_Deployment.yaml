@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: grafana-deployment
+  labels:
+    app: grafana
+    environment: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+      environment: dev
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: grafana
+        environment: dev
+    spec:
+      volumes:
+      - name: grafana-persistent-storage
+        persistentVolumeClaim:
+          claimName: grafana-pvc
+      containers:
+        - name: grafana-container
+          image: grafana/grafana
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+          - name: grafana-persistent-storage
+            mountPath: /var/lib/grafana

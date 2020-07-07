@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: prometheus-deployment
+  labels:
+    app: prometheus
+    environment: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+      environment: dev
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: prometheus
+        environment: dev
+    spec:
+      volumes:
+      - name: prometheus-persistent-storage
+        persistentVolumeClaim:
+          claimName: prometheus-data-pvc
+      - name: prom-configmap
+        configMap:
+          defaultMode: 420
+          name: prom-configmap
+      containers:
+        - name: prometheus-container
+          image: prom/prometheus
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+          - name: prometheus-persistent-storage
+            mountPath: /prometheus/
+          - name: prom-configmap
+            mountPath: /etc/prometheus/

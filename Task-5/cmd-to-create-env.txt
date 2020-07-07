@@ -1,0 +1,3 @@
+git clone https://github.com/Divyajeet-Singh/DevOps-AL.git
+cd ./Task-5
+kubectl apply -k .
