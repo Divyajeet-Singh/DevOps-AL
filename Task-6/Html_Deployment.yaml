@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: html-deployment
+  labels:
+    app: html
+    environment: dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: html
+      environment: dev
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: html
+        environment: dev
+    spec:
+      volumes:
+      - name: html-persistent-storage
+        persistentVolumeClaim:
+          claimName: html-pvc
+      containers:
+        - name: html-container
+          image: divyajeetsingh/html:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+          - name: html-persistent-storage
+            mountPath: /usr/local/apache2/htdocs/

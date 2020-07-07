@@ -1,0 +1,3 @@
+FROM php
+COPY ./*.php /usr/src/myapp
+WORKDIR /usr/src/myapp
